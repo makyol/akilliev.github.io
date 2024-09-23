@@ -3,28 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirecting...</title>
+    <title>HomeWhiz Redirecting...</title>
     <script>
-        // Detect the user's platform and redirect accordingly
-        function redirectToStore() {
+        function redirectToAppOrStore() {
             var userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
-            // Redirect based on device
+            // iOS devices
             if (/iPhone|iPad|iPod/i.test(userAgent)) {
-                window.location.href = "https://apps.apple.com/gb/app/homewhiz/id1234028528"; // App Store URL for iOS
-            } else if (/android/i.test(userAgent)) {
-                window.location.href = "https://play.google.com/store/apps/details?id=com.homewhiz.global"; // Google Play URL for Android
-            } else {
-                window.location.href = "https://www.homewhiz.com/"; // Fallback to website for other devices
-            }
+                // Try to open the app using a custom URL scheme (replace 'homewhiz://' with your app's custom scheme)
+                var appUrl = "homewhiz://";
+                var storeUrl = "https://apps.apple.com/gb/app/homewhiz/id1234028528";
+                
+                openAppOrStore(appUrl, storeUrl);
+            } 
+            // Android devices
+            else if (/android/i.test(userAgent)) {
+                // Try to open the app using an Intent (replace 'com.homewhiz.global' with your app's package name)
+                var appUrl = "intent://#Intent;scheme=homewhiz;package=com.homewhiz.global;end";
+                var storeUrl = "https://play.google.com/store/apps/details?id=com.homewhiz.global";
 
-            // Close the current tab after a short delay
-            setTimeout(function() {
-                window.close();
-            }, 1000); // 1-second delay before trying to close the page
+                openAppOrStore(appUrl, storeUrl);
+            } 
+            // Fallback to website for other devices
+            else {
+                window.location.href = "https://www.homewhiz.com/";
+            }
         }
-        // Call the function to immediately redirect
-        window.onload = redirectToStore;
+
+        // Function to handle opening the app or redirecting to the store
+        function openAppOrStore(appUrl, storeUrl) {
+            // Create a hidden iframe to attempt opening the app
+            var iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = appUrl;
+            document.body.appendChild(iframe);
+
+            // If the app doesn't open within a timeout, redirect to the store
+            setTimeout(function() {
+                window.location.href = storeUrl;
+            }, 2000);  // 2-second delay before redirecting to the store
+        }
+
+        // Call the function immediately to perform the redirection
+        window.onload = redirectToAppOrStore;
     </script>
 </head>
 <body>
