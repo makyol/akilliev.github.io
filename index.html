@@ -3,32 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App Store Redirect</title>
-</head>
-<body>
-    <h1>Redirecting to the appropriate app store...</h1>
-
+    <title>Redirecting...</title>
     <script>
         // Detect the user's platform and redirect accordingly
         function redirectToStore() {
             var userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
-            // Check for iOS (iPhone, iPad, iPod)
+            // Redirect based on device
             if (/iPhone|iPad|iPod/i.test(userAgent)) {
                 window.location.href = "https://apps.apple.com/gb/app/homewhiz/id1234028528"; // App Store URL for iOS
-            }
-            // Check for Android
-            else if (/android/i.test(userAgent)) {
+            } else if (/android/i.test(userAgent)) {
                 window.location.href = "https://play.google.com/store/apps/details?id=com.homewhiz.global"; // Google Play URL for Android
-            }
-            // Default action (Optional: redirect to website)
-            else {
+            } else {
                 window.location.href = "https://www.homewhiz.com/"; // Fallback to website for other devices
             }
-        }
 
-        // Call the function to perform the redirection
-        redirectToStore();
+            // Close the current tab after a short delay
+            setTimeout(function() {
+                window.close();
+            }, 1000); // 1-second delay before trying to close the page
+        }
+        // Call the function to immediately redirect
+        window.onload = redirectToStore;
     </script>
+</head>
+<body>
 </body>
 </html>
